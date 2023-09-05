@@ -6,7 +6,7 @@ import { Link, useParams } from 'react-router-dom'
 import useApi from '../../helper/useApi'
 import moment from 'moment'
 import { addData, addDataBooking } from '../../store/reducer/user'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from "react-redux";
 import { current } from '@reduxjs/toolkit'
 
 
@@ -15,6 +15,7 @@ function Details_movie() {
 
     const api = useApi()
     const Dispatch = useDispatch()
+    const {isAuth} = useSelector((s) => s.users)
     
     const [movie, setMovie] = useState({})
     const [times, setTime] = useState([])
@@ -180,59 +181,59 @@ function Details_movie() {
   return (
     <>
         <Header />
-        <img src={movie ? movie.url_image_movie:Poster} alt="" className='absolute w-full h-[34rem] object-cover mx-auto object-top' />
+        <img src={movie ? movie.url_image_movie:Poster} alt="" className='absolute md:flex hidden w-full h-[34rem] object-cover mx-auto object-top' />
         <div className='relative mx-auto max-w-7xl pl-5'>
-            <section className='mt-96'>
-                <div className='flex object-bottom gap-x-12'>
-                <img src={movie? movie.url_image_movie:Poster} alt="spiderman-logo" className='z-10 h-auto w-56' />
-                <div className='relative top-40'>
-                    <h1 className='font-bold text-lg m-2'>{movie ? movie.title_movie:"data not found"}</h1>
-                    <div className='flex gap-x-2'>
-                        {
-                            movie.genre ? movie.genre.map((v) => {
-                                return <h2 className='w-32 text-base bg-gray-100 border text-center rounded-full'>{v}</h2>
-                            })
-                            :
-                            <>
-                            </>
-                        }
-                    </div>
-                    <div className="flex gap-x-12 gap-y-5 pt-6">
-                        <div>
-                            <div className="">
-                                <p className="text-sm text-gray-600 my-2">Release date</p>
-                                {
-                                movie != null ? 
-
-                                <p>{movie.release_date_movie}</p>
-
-
+            <section className='md:mt-96 mt-12'>
+                <div className='flex md:flex-row flex-col object-bottom gap-x-12'>
+                    <img src={movie? movie.url_image_movie:Poster} alt="spiderman-logo" className='rounded-lg md:mx-0 mx-auto z-10 h-auto w-56' />
+                    <div className='relative md:top-40 top-4'>
+                        <h1 className='font-bold text-lg m-2'>{movie ? movie.title_movie:"data not found"}</h1>
+                        <div className='flex gap-x-2'>
+                            {
+                                movie.genre ? movie.genre.map((v) => {
+                                    return <h2 className='w-32 text-base bg-gray-100 border text-center rounded-full'>{v}</h2>
+                                })
                                 :
-                                <p>Data not found</p>
-                            }    
-                                        </div>
-                            <div className="movie">
-                                <p className="text-sm text-gray-600 my-2">Directed by</p>
-                                <p className="caption">{movie?movie.director_movie:"data not found"}</p>
-                            </div>
+                                <>
+                                </>
+                            }
                         </div>
-                        <div>
-                            <div className="movie">
-                                <p className="text-sm text-gray-600 my-2">Duration</p>
-                                <p className="caption">{movie?movie.duration_movie:"data not found"}</p>
+                        <div className="flex sm:flex-row flex-col gap-x-12 md:gap-y-5 gap-y-0 pt-6">
+                            <div>
+                                <div className="">
+                                    <p className="text-sm text-gray-600 my-2">Release date</p>
+                                    {
+                                    movie != null ? 
+
+                                    <p>{movie.release_date_movie}</p>
+
+
+                                    :
+                                    <p>Data not found</p>
+                                }    
+                                            </div>
+                                <div className="movie">
+                                    <p className="text-sm text-gray-600 my-2 sm:mt-2 mt-4">Directed by</p>
+                                    <p className="caption">{movie?movie.director_movie:"data not found"}</p>
+                                </div>
                             </div>
-                            <div className="movie">
-                                <p className="text-sm text-gray-600 my-2">Casts</p>
-                                <p className="caption">
-                                {movie?movie.casts_movie:"data not found"}
-                                </p>
+                            <div>
+                                <div className="movie">
+                                    <p className="text-sm text-gray-600 my-2 sm:mt-2 mt-4">Duration</p>
+                                    <p className="caption">{movie?movie.duration_movie:"data not found"}</p>
+                                </div>
+                                <div className="movie">
+                                    <p className="text-sm text-gray-600 my-2 sm:mt-2 mt-4">Casts</p>
+                                    <p className="caption">
+                                    {movie?movie.casts_movie:"data not found"}
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
                 </div>
                 <div className=''>
-                    <h2 className='md:mt-20 mt-36 text-lg font-bold'>Synopsis</h2>
+                    <h2 className='md:mt-20 mt-16 text-lg font-bold'>Synopsis</h2>
                     <p className='w-3/4 leading-loose'>
                     {movie?movie.synopsis_movie:"data not found"}
                     </p>
@@ -240,7 +241,7 @@ function Details_movie() {
             </section>
             <section className=''>
                 <h2 className='mt-16 text-2xl font-bold'>{(!schedule ? "The Movie You Are Looking For Is Not Aired Yet...":"Book Tickets")}</h2>
-                <div className={(!schedule ? "hidden":'flex md:flex-row flex-col gap-y-8 justify-between mx-auto items-center px-2 mt-10')}>
+                <div className='flex md:flex-row flex-col gap-y-8 justify-between mx-auto items-center px-2 mt-10'>
                     <div className="flex flex-col gap-y-2 md:w-1/4 w-full">
                         <h3 className='mx-auto'>Choose Date</h3>
                         <select onChange={filterDate} className="select select-bordered mx-auto w-full text-gray-400 h-12 max-w-xs bg-gray-100">
@@ -289,7 +290,6 @@ function Details_movie() {
                     </div>
                 </div>
             </section>
-            {/* <span className={(error_message != '' ? 'text-red-400' : phone == '' ? 'text-[#A9A9A9]' : 'text-[#6379F4]') + " flex gap-x-2 absolute mt-5 ml-2 items-center"}><BsTelephone /></span> */}
             <section className={(total.total === meta.total ? 'hidden':'relative flex flex-col gap-y-10 mt-10')}>
                 <div className='flex gap-x-10 items-center'>
                     <h2 className='text-md font-bold'>Choose Cinema </h2>
@@ -316,13 +316,9 @@ function Details_movie() {
                             Math.ceil((meta.total/3)) == page || Math.ceil((meta.total/12)) == 0 ? <button disabled className="btn btn-sm btn-outline btn-primary border border-white w-24 bg-white shadow-lg">Next</button> : <button onClick={() => setPage(meta.next)} className="btn btn-sm text-primary hover:bg-primary hover:text-white  border-white w-24 bg-white shadow-lg">Next</button>
                         }
                         </div>
-                        {/* <div className='btn w-12 h-10 rounded-full font-bold text-slate-400'>1</div>
-                        <div className='btn w-12 h-10 rounded-full font-bold text-slate-400'>2</div>
-                        <div className='btn w-12 h-10 rounded-full font-bold text-slate-400'>3</div>
-                        <div className='btn w-12 h-10 rounded-full font-bold text-slate-400'>4</div> */}
                     </div>
                 </div>
-                <Link to={(!filterdate || !filterloc || !filtertime || !datas.cinema_name ? '':'/order_page')} onClick={handleBook} className={(!filterdate || !filterloc || !filtertime || !datas.cinema_name ? "h-16 object-bottom w-44 bg-white mx-auto items-center flex justify-center text-gray-400 rounded-lg border":"h-16 object-bottom w-44 bg-primary mx-auto items-center flex justify-center text-white rounded-lg hover:bg-white hover:text-primary border")}>BOOK NOW</Link>
+                <Link to={(!filterdate || !filterloc || !filtertime || !datas.cinema_name || !isAuth ? '':'/order_page')} onClick={handleBook} className={(!filterdate || !filterloc || !filtertime || !datas.cinema_name || !isAuth ? "h-16 object-bottom w-44 bg-white mx-auto items-center text-center flex justify-center text-gray-400 rounded-lg border":"h-16 object-bottom text-center w-44 bg-primary mx-auto items-center flex justify-center text-white rounded-lg hover:bg-white hover:text-primary border")}>{(!isAuth ? 'LOGIN NEEDED' : 'BOOK NOW')}</Link>
             </section>
 
         </div>

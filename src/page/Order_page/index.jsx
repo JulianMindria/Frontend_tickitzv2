@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Header from '../../component/header'
 import Footer from '../../component/footer'
 import Poster from '../../assets/spiderman logo.svg'
 import Dummy from '../../assets/Screenshot from 2023-08-25 02-38-15.png'
 import Cinema from '../../assets/Vector.png'
 import { AiOutlineCheck } from 'react-icons/ai'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { addDataCheckout, addDataBooking } from '../../store/reducer/user'
 import Select from 'react-dropdown-select'
@@ -13,8 +13,9 @@ import Select from 'react-dropdown-select'
 
 function Order_page() {
     const Dispatch = useDispatch()
-    const {dataBooking} = useSelector((s)=>s.users)
+    const {dataBooking, isAuth} = useSelector((s)=>s.users)
     const [value, setValues] = useState([])
+    const navigate = useNavigate()
 
     const changebutton =`/buy_ticket/${dataBooking.id_movie}`
     let arr = []
@@ -49,7 +50,11 @@ function Order_page() {
     }
 
     let array_genre = (dataBooking.genre).split(", ")
-    
+    useEffect(() => {
+        if (!isAuth) {
+            navigate('/')
+        }
+    }, [isAuth])
   return (
     <>
         <Header />

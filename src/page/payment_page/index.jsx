@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import moment from 'moment'
 import Header from '../../component/header'
 import Footer from '../../component/footer'
@@ -20,7 +20,7 @@ import useApi from '../../helper/useApi'
 
 function Payment_page() {
     const [payment, setPayment] = useState()
-    const {dataBooking, dataCheckout, data} = useSelector((s)=>s.users)
+    const {dataBooking, dataCheckout, data, isAuth} = useSelector((s)=>s.users)
     const api = useApi()
     const navigate = useNavigate()
 
@@ -64,6 +64,12 @@ function Payment_page() {
         })
 
     }
+
+    useEffect(() => {
+        if (!isAuth) {
+            navigate('/')
+        }
+    }, [isAuth])
 
   return (
     <>
@@ -123,15 +129,15 @@ function Payment_page() {
                     <h1 className='text-2xl font-medium my-5'>Personal Information</h1>
                     <div className='flex flex-col gap-y-4'>
                         <h1 className='text-gray-400 text-lg'>Full Name</h1>
-                        <input className='h-20 border border-gray-400 rounded-lg text-gray-400 text-lg' type="text" value={data.data[0].first_name+" "+data.data[0].last_name}/>
+                        <input className='h-20 border border-gray-400 rounded-lg text-gray-400 text-lg' type="text" value={!isAuth? "" : data.data[0].first_name+" "+data.data[0].last_name}/>
                     </div>
                     <div className='flex flex-col gap-y-4 mt-4'>
                         <h1 className='text-gray-400 text-lg'>Email</h1>
-                        <input className='h-20 border border-gray-400 rounded-lg text-gray-400 text-lg' type="text" value={data.data[0].email_user}/>
+                        <input className='h-20 border border-gray-400 rounded-lg text-gray-400 text-lg' type="text" value={!isAuth ? "" : data.data[0].email_user}/>
                     </div>
                     <div className='flex flex-col gap-y-4 mt-4'>
                         <h1 className='text-gray-400 text-lg'>Phone Number</h1>
-                        <input className='h-20 border border-gray-400 rounded-lg text-gray-400 text-lg' type="tel" value={data.data[0].phone_number}/>
+                        <input className='h-20 border border-gray-400 rounded-lg text-gray-400 text-lg' type="tel" value={!isAuth? "" : data.data[0].phone_number}/>
                     </div>
                     <h1 className='text-2xl font-medium my-5'>Payment Method</h1>
                     <div className='mx-auto flex md:flex-col flex-row gap-y-4 gap-x-4'>

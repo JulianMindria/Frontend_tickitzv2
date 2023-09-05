@@ -1,11 +1,7 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import Header from '../../component/header'
 import Footer from '../../component/footer'
-import Poster from '../../assets/spiderman logo.svg'
-import Dummy from '../../assets/Screenshot from 2023-08-25 02-38-15.png'
-import Cinema from '../../assets/Vector.png'
-import { AiOutlineCheck } from 'react-icons/ai'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import backg from '../../assets/logo cinema/Group 7.svg'
 import qr from '../../assets/logo cinema/QR Code 1.svg'
 import logo from '../../assets/tickitz 1.png'
@@ -20,7 +16,14 @@ function Check_payment() {
         Dispatch(addDataBooking({}))
         Dispatch(addDataCheckout({}))
     }
-    const {dataBooking, dataCheckout, data} = useSelector((s)=>s.users)
+    const navigate = useNavigate()
+    const {dataBooking, dataCheckout, isAuth} = useSelector((s)=>s.users)
+
+    useEffect(() => {
+        if (!isAuth) {
+            navigate('/')
+        }
+    }, [isAuth])
   return (
     <>
         <Header />
